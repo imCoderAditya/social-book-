@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:social_book/app/core/config/theme/app_colors.dart';
@@ -12,6 +13,7 @@ import 'package:social_book/app/data/models/reels/reels_model.dart';
 import 'package:social_book/app/modules/reels/widgets/reels_comment_widget.dart';
 
 import 'package:video_player/video_player.dart';
+import '../../editer/views/VideoEditorScreen.dart';
 import '../controllers/reels_controller.dart';
 
 class ReelsView extends GetView<ReelsController> {
@@ -137,6 +139,18 @@ class _ReelItemState extends State<_ReelItem>
     super.dispose();
   }
 
+  Future pickVideo(BuildContext context) async {
+    final file = await ImagePicker().pickVideo(source: ImageSource.gallery);
+    if (file != null) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => VideoEditorScreen(file.path),
+        ),
+      );
+    }
+  }
+
   // ignore: unused_element
 
   @override
@@ -223,6 +237,13 @@ class _ReelItemState extends State<_ReelItem>
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                  IconButton(
+                    onPressed: () => pickVideo(context),
+                    icon: const Icon(Icons.add),
+                    color: Colors.white,
+                    iconSize: 28,
+                    autofocus: true,
+                  ),
                   const Text(
                     'Reels',
                     style: TextStyle(
@@ -231,6 +252,7 @@ class _ReelItemState extends State<_ReelItem>
                       fontWeight: FontWeight.bold,
                     ),
                   ),
+
                   IconButton(
                     onPressed: () {},
                     icon: const Icon(Icons.camera_alt_outlined),
